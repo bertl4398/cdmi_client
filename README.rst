@@ -38,4 +38,21 @@ To use (with caution), simply do:
     open   - open connection to CDMI server
     ?      - show available commands
 
-    
+More Examples
+-------------
+
+Simple Query
+^^^^^^^^^^^^
+
+To perform a simple query you need to open a connection first and provide some
+authentication, for example:
+
+.. code-block:: bash
+
+    $ cdmi-cli
+    cdmi @> open cdmi.exmpale.com 443
+    cdmi @cdmi.example.com> auth basic
+    Enter username: cdmi_user
+    Enter password:
+    cdmi @cdmi.example.com> query /
+
