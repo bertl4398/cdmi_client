@@ -7,7 +7,7 @@ import getpass
 FORMAT = "%(asctime)-15s [%(levelname)s] %(message)s"
 logging.basicConfig(format=FORMAT)
 
-log = logging.getLogger(sys.argv[0])
+log = logging.getLogger('cdmi-cli')
 
 commands = dict()
 commands["?"]="show available commands"
@@ -32,17 +32,17 @@ def usage():
   print 'CDMI interactive command line client'
   print 
   print '(C) Karlsruhe Institute of Technology (KIT)'
-  print '       Steinbuch Centre for Computing (SCC)'
+  print '    Steinbuch Centre for Computing  - (SCC)'
   print
-  print 'usage: {0} [options]'.format(sys.argv[0])
+  print 'usage: {0} [options]'.format('cdmi-cli')
   print '-h --help    - show this message'
   print '-s --server  - connect to server'
   print '-p --port    - connect to server:port'
   print '-d --debug   - enable debug mode'
   print
-  print 'example: {0}'.format(sys.argv[0])
-  print 'example: {0} --debug'.format(sys.argv[0])
-  print 'example: {0} -s cdmi.example.com -p 443'.format(sys.argv[0])
+  print 'example: {0}'.format('cdmi-cli')
+  print 'example: {0} --debug'.format('cdmi-cli')
+  print 'example: {0} -s cdmi.example.com -p 443'.format('cdmi-cli')
   
 def help():
   print 'available commands:'
@@ -65,8 +65,8 @@ def help_query():
   print '         all  - show all information'
   print '         json - show the raw JSON response'
   print
-  print 'example: query cdmi_capabilities raw'
-  print 'example: query cdmi_capabilities/DiskOnly'
+  print 'example: query cdmi_capabilities json'
+  print 'example: query cdmi_capabilities/dataobject/DiskOnly'
   print 'example: query test.txt all'
 
 def help_qos():
@@ -74,7 +74,7 @@ def help_qos():
   print
   print 'usage:   qos path capabilitiesUri'
   print
-  print 'example: qos test.txt TapeOnly'
+  print 'example: qos test.txt cdmi_capabilities/dataobject/DiskOnly'
 
 def help_auth():
   print 'auth   - authentication for the CDMI server'
