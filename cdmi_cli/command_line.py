@@ -204,7 +204,61 @@ def query(path, option):
     print_response(j, option)
 
 def qos(path, capabilities):
-  pass
+  import requests
+  from requests.packages.urllib3.exceptions import InsecureRequestWarning
+  requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+  if not host:
+    print "!error: you need to open a connection to a CDMI server first"
+    return
+
+  path = path.strip().lstrip('/')
+  capabilities_uri = capabilities.strip().lstrip('/')
+
+  headers = {'X-CDMI-Specification-Version': '1.1.1'}
+
+  if capabilities_uri.find('cdmi_capabilities/dataobject') != -1:
+    headers['Content-Type'] = 'application/cdmi-object'
+  elif capabilities_uri.find('cdmi_capabilities/container') != -1:
+    headers['Content-Type'] = 'application/cdmi-container'
+  else:
+    print "!error: wrong capabilities URI format"
+    return
+
+  data = {'capabilitiesURI': '/{0}'.format(capabilities_uri)}
+  r = None
+  try:
+    if user:
+      r = requests.put('https://{0}:{1}/{2}'.format(host, port, path), verify=False, auth=(user,password), headers=headers, data=json.dumps(data))
+    elif token:
+      headers['Authentication'] = 'Bearer {0}'.format(token)
+      r = requests.put('https://{0}:{1}/{2}'.format(host, port, path), verify=False, headers=headers, data=json.dumps(data))
+    else:
+      print "!error: you need to provide authentication first"
+      return
+  except requests.exceptions.ConnectionError:
+    try:
+      if user:
+        r = requests.put('http://{0}:{1}/{2}'.format(host, port, path), auth=(user,password), headers=headers, data=json.dumps(data))
+      elif token:
+        headers['Authentication'] = 'Bearer {0}'.format(token)
+        r = requests.put('http://{0}:{1}/{2}'.format(host, port, path), verify=False, headers=headers, data=json.dumps(data))
+      else:
+        print "!error: you need to provide authentication first"
+        return
+    except requests.exceptions.ConnectionError:
+      print "!connection error"
+      return
+
+  log.info("status code: {}".format(r.status_code))
+  log.info("response headers {}".format(r.headers))
+
+  if r.status_code == 401:
+    print "!not authorized"
+  elif r.status_code == 404:
+    print "!not found"
+  elif r.status_code == 204:
+    print "... QoS transition committed ..."
 
 def main():
   global host
