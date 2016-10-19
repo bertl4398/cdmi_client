@@ -96,36 +96,53 @@ def print_response(json_, format_=None):
     print json.dumps(json_, indent=4)
     return
 
+  width = 30
+  indent = 4
+  indent_width = 26
+  double_indent_width = 22
+
   object_type = json_.get('objectType')
 
-  print 'Object name:            {0}'.format(json_.get('objectName'))
-  print 'Object type:            {0}'.format(json_.get('objectType'))
-  print 'Object id:              {0}'.format(json_.get('objectID'))
-  print 'Parent URI              {0}'.format(json_.get('parentURI'))
-  print 'Parent id:              {0}'.format(json_.get('parentID'))
+  print '{0:{width}} {1}'.format('Object name:', json_.get('objectName'), width=width)
+  print '{0:{width}} {1}'.format('Object type:', json_.get('objectType'), width=width)
+  print '{0:{width}} {1}'.format('Object ID:', json_.get('objectID'), width=width)
+  print '{0:{width}} {1}'.format('Parent URI:', json_.get('parentURI'), width=width)
+  print '{0:{width}} {1}'.format('Parent ID:', json_.get('parentID'), width=width)
 
   if object_type == "application/cdmi-container":
-    print 'Capabilities URI:       {0}'.format(json_.get('capabilitiesURI'))
-    print 'Domain URI:             {0}'.format(json_.get('domainURI'))
-    print 'Completion status:      {0}'.format(json_.get('completionStatus'))
+    print '{0:{width}} {1}'.format('Capabilities URI:', json_.get('capabilitiesURI'), width=width)
+    print '{0:{width}} {1}'.format('Domain URI:', json_.get('domainURI'), width=width)
+    print '{0:{width}} {1}'.format('Completion status:', json_.get('completionStatus'), width=width)
+    if json_.has_key('children'):
+      print '{0:{width}}'.format('Children:', width=width)
+      for child in json_.get('children', []):
+        print '{0:{width}} {1}'.format(' ', child, width=width)
+    if json_.has_key('exports'):
+      print '{0:{width}}'.format('Supported data protocols:', width=width)
+      for protocol in json_.get('exports', dict()):
+        print '{0:{indent}}{1}'.format(' ', protocol + ':', indent=indent)
+        protocol_dict = json_.get('exports', dict()).get(protocol)
+        for key in protocol_dict:
+          print '{0:{indent}}{1:{indent}}{2:{width}} {3}'.format(' ', ' ', key + ':', protocol_dict[key], indent=indent, width=double_indent_width)
 
   elif object_type == "application/cdmi-object":
-    print 'Capabilities URI:       {0}'.format(json_.get('capabilitiesURI'))
-    print 'Domain URI:             {0}'.format(json_.get('domainURI'))
-    print 'Completion status:      {0}'.format(json_.get('completionStatus'))
-    print 'MIME type:              {0}'.format(json_.get('mimetype'))
+    print '{0:{width}} {1}'.format('Capabilities URI:', json_.get('capabilitiesURI'), width=width)
+    print '{0:{width}} {1}'.format('Domain URI:', json_.get('domainURI'), width=width)
+    print '{0:{width}} {1}'.format('Completion status:', json_.get('completionStatus'), width=width)
+    print '{0:{width}} {1}'.format('MIME type:', json_.get('mimetype'), width=width)
 
   elif object_type == "application/cdmi-capability":
     if json_.has_key('children'):
-      print 'Children:                  '
+      print '{0:{width}}'.format('Children:', width=width)
       for child in json_.get('children', []):
-        print '                        {0}'.format(child)  
+        print '{0:{width}} {1}'.format(' ', child, width=width)
     if json_.has_key('metadata') and json_.get('metadata'):
-      print 'Capabilities:              '
-      print '  Data redundancy:      {0}'.format(json_.get('metadata', dict()).get('cdmi_data_redundancy'))
-      print '  Latency (ms):         {0}'.format(json_.get('metadata', dict()).get('cdmi_latency'))
-      print '  Geographic placement: {0}'.format(json_.get('metadata', dict()).get('cdmi_geographic_placement'))
-      print '  Throughput (bps):     {0}'.format(json_.get('metadata', dict()).get('cdmi_throughput'))
+      print '{0:{width}}'.format('Capabilities:', width=width)
+      print '{0:{indent}}{1:{width}} {2}'.format(' ', 'Data redundancy:', json_.get('metadata', dict()).get('cdmi_data_redundancy'), indent=indent, width=indent_width)
+      print '{0:{indent}}{1:{width}} {2}'.format(' ', 'Latency (ms):', json_.get('metadata', dict()).get('cdmi_latency'), indent=indent, width=indent_width)
+      print '{0:{indent}}{1:{width}} {2}'.format(' ', 'Throughput (bps):', json_.get('metadata', dict()).get('cdmi_throughput'), indent=indent, width=indent_width)
+      print '{0:{indent}}{1:{width}} {2}'.format(' ', 'Capabilities allowed:', json_.get('metadata', dict()).get('cdmi_capabilities_allowed'), indent=indent, width=indent_width)
+      print '{0:{indent}}{1:{width}} {2}'.format(' ', 'Geographic placement:', json_.get('metadata', dict()).get('cdmi_geographic_placement'), indent=indent, width=indent_width)
 
 def auth(oidc=None):
   global user
