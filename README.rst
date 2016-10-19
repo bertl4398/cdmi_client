@@ -6,6 +6,12 @@ An interactive command line client for CDMI.
 Installation
 ------------
 
+To install cdmi-cli, simply:
+
+.. code-block:: bash
+
+    $ sudo pip install cdmi_client
+
 To install cdmi-cli from source:
 
 .. code-block:: bash
