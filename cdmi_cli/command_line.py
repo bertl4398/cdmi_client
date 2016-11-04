@@ -1,8 +1,15 @@
+from __future__ import unicode_literals
+
 import sys
 import json
 import getopt
 import logging
 import getpass
+
+from prompt_toolkit.shortcuts import prompt
+from prompt_toolkit.history import InMemoryHistory
+
+history = InMemoryHistory()
 
 FORMAT = "%(asctime)-15s [%(levelname)s] %(message)s"
 logging.basicConfig(format=FORMAT)
@@ -292,7 +299,8 @@ def main():
 
   try:
     while True:
-      cmd = raw_input('cdmi @{0}> '.format(host))
+      #cmd = raw_input('cdmi @{0}> '.format(host))
+      cmd = prompt('cdmi @{0}> '.format(host), history=history)
       cmd = cmd.strip()
 
       if len(cmd.split()) == 1:

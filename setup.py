@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='cdmi_client',
-      version='0.1',
+      version='0.2',
       description='Interactive command line client for CDMI',
       long_description=readme(),
       classifiers=[
@@ -23,6 +23,7 @@ setup(name='cdmi_client',
       packages=['cdmi_cli'],
       install_requires=[
           'requests',
+          'prompt_toolkit',
       ],
       test_suite='nose.collector',
       tests_require=['nose', 'nose-cover3'],
