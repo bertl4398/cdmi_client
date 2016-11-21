@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='cdmi_client',
-      version='0.2',
+      version='0.3',
       description='Interactive command line client for CDMI',
       long_description=readme(),
       classifiers=[

@@ -179,20 +179,20 @@ def query(path, option):
     if user:
       r = requests.get('https://{0}:{1}/{2}'.format(host, port, path), verify=False, auth=(user,password), headers=headers)
     elif token:
-      headers['Authentication'] = 'Bearer {0}'.format(token)
+      headers['Authorization'] = 'Bearer {0}'.format(token)
       r = requests.get('https://{0}:{1}/{2}'.format(host, port, path), verify=False, headers=headers)
     else:
-      print "!error: you need to provide authentication first"
+      print "!error: you need to provide authorization first"
       return
   except requests.exceptions.ConnectionError:
     try:
       if user:
         r = requests.get('http://{0}:{1}/{2}'.format(host, port, path), auth=(user,password), headers=headers)
       elif token:
-        headers['Authentication'] = 'Bearer {0}'.format(token)
+        headers['Authorization'] = 'Bearer {0}'.format(token)
         r = requests.get('http://{0}:{1}/{2}'.format(host, port, path), verify=False, headers=headers)
       else:
-        print "!error: you need to provide authentication first"
+        print "!error: you need to provide authorization first"
         return
     except requests.exceptions.ConnectionError:
       print "!connection error"
